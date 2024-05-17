@@ -8,7 +8,15 @@ def SignUpPage(win):
         master=page, width=1280, height=720, borderwidth=0, highlightthickness=0
     )
     canvas.place(x=0, y=0)
-    win.title("Urban Utopia - Sign Up")
+
+    def onmount():
+        win.title("Urban Utopia - Sign Up")
+
+    def ondestroy():
+        form_name_entry.delete(0, len(form_name_entry.get()))
+        form_email_entry.delete(0, len(form_email_entry.get()))
+        form_pwd_entry.delete(0, len(form_pwd_entry.get()))
+        form_cfm_pwd_entry.delete(0, len(form_cfm_pwd_entry.get()))
 
     ImageWidget(
         canvas,
@@ -110,4 +118,4 @@ def SignUpPage(win):
     form_frame.place(relx=0.5, rely=0.5, anchor="w")
 
     page.pack_propagate(0)
-    return "signup", page
+    return "signup", page, onmount, ondestroy

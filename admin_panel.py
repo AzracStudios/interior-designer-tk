@@ -6,6 +6,8 @@ from tknav import Navigator
 from admin.tableselect import TableSelectPage
 from admin.users import UsersPage
 from admin.rooms import RoomsPage
+from admin.styles import StylesPage
+from admin.designs import DesignsPage
 
 from sql.api import *
 
@@ -33,7 +35,7 @@ def config_navigator(win, pages):
 def main():
     window = make_window()
 
-    PAGES = [TableSelectPage, UsersPage, RoomsPage]
+    PAGES = [TableSelectPage, UsersPage, RoomsPage, StylesPage, DesignsPage]
     nav = config_navigator(window, PAGES)
 
     nav.navigate_to("tableselect")

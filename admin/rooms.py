@@ -32,7 +32,6 @@ def handle_sql_create(
         and len(banner_loc) > 0
         and len(card_loc) > 0
     ):
-        print("hi")
         err = ctk.CTkToplevel()
         err.transient(master=window)
         err.title("Urban Utopia Admin - Error")

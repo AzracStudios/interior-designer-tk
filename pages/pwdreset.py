@@ -9,7 +9,14 @@ def PasswordResetPage(win):
         width=1280,
         height=720,
     )
-    win.title("Urban Utopia - Reset Password")
+
+    def onmount():
+        win.title("Urban Utopia - Reset Password")
+
+    def ondestroy():
+        form_email_entry.delete(0, len(form_email_entry.get()))
+        form_pwd_entry.delete(0, len(form_pwd_entry.get()))
+        form_cfmpwd_entry.delete(0, len(form_cfmpwd_entry.get()))
 
     canvas = ctk.CTkCanvas(
         master=page, width=1280, height=720, borderwidth=0, highlightthickness=0
@@ -149,4 +156,4 @@ def PasswordResetPage(win):
 
     form_frame.place(relx=0.5, rely=0.5, anchor="w")
     page.pack_propagate(0)
-    return "pwdreset", page
+    return "pwdreset", page, onmount, ondestroy

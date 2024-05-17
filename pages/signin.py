@@ -6,7 +6,12 @@ from utils import encrypt
 
 def SignInPage(win):
     page = ctk.CTkFrame(master=win, width=1280, height=720)
-    win.title("Urban Utopia - Sign In")
+
+    def onmount():
+        win.title("Urban Utopia - Sign In")
+    def ondestroy():
+        form_email_entry.delete(0, form_email_entry.get())
+        form_pwd_entry.delete(0, form_pwd_entry.get())
 
     canvas = ctk.CTkCanvas(
         master=page, width=1280, height=720, borderwidth=0, highlightthickness=0
@@ -121,4 +126,4 @@ def SignInPage(win):
 
     form_frame.place(relx=0.5, rely=0.5, anchor="w")
     page.pack_propagate(0)
-    return "signin", page
+    return "signin", page, onmount, ondestroy

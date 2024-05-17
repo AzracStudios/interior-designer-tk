@@ -28,6 +28,7 @@ def Table(
     column_headers.extend([("[ACTION]", 50), ("[ACTION]", 50)])
 
     image_columns = []
+    get_name_columns = {}
 
     for i, header in enumerate(column_headers):
         column_header, width = header
@@ -36,6 +37,12 @@ def Table(
         if column_header[:7] == "[IMAGE]":
             column_header = column_header[7:]
             image_columns.append(i)
+
+        if column_header[:9] == "[GETNAME:":
+            idx = column_header.find("]")
+            idx2 = column_header.find(",")
+            get_name_columns[i] = (column_header[9 : idx2], column_header[idx2+1:idx].lower(),)
+            column_header = column_header[idx + 1 :]
 
         element = ctk.CTkFrame(
             master=table,
@@ -123,11 +130,22 @@ def Table(
                         else row_colors[row_color_index],
                     ),
                 )
-                
 
                 if x in image_columns:
                     row_data, _ = ImagePreview(
                         row_frame, width - 20, column, bg=row_colors[row_color_index]
+                    )
+
+                elif x in get_name_columns:
+                    cursor.execute(f"select {get_name_columns[x][0]} from {get_name_columns[x][1]} where uid='{column}'")
+                    data = cursor.fetchone()
+                    
+                    row_data = ctk.CTkLabel(
+                        master=row_frame,
+                        text=data[0],
+                        text_color=text_colors[row_color_index]
+                        if len(text_colors) > 1
+                        else text_colors[0],
                     )
 
                 else:

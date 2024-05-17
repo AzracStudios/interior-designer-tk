@@ -9,7 +9,9 @@ def WelcomePage(win):
 
     user_details = None
 
-    win.title("Urban Utopia - Welcome")
+    def onmount():
+        win.title("Urban Utopia - Welcome")
+
     canvas = ctk.CTkCanvas(
         master=page, width=1280, height=720, borderwidth=0, highlightthickness=0
     )
@@ -117,4 +119,4 @@ def WelcomePage(win):
     )
     tnc.place(relx=0.2, rely=0.98, anchor="sw")
 
-    return "welcome", page
+    return "welcome", page, onmount, lambda: None

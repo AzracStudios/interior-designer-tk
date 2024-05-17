@@ -33,7 +33,7 @@ TABLES['styles'] = """
 create table styles (
   uid varchar(36) not null,
   style_name varchar(255) not null unique,
-  style_banner varchar(255) not null,
+  style_desc varchar(255) not null,
   primary key (uid)
 )
 """

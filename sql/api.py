@@ -81,14 +81,28 @@ def change_password(email, password):
 
     return 1
 
+
 def get_user(email):
     cursor.execute(f"select * from users where email={email}")
     return cursor.fetchone()
+
 
 def fetch_rooms():
     cursor.execute("select * from rooms")
     return cursor.fetchall()
 
+
+def fetch_room_by_id(id):
+    cursor.execute(f"select * from rooms where uid='{id}'")
+    return cursor.fetchone()
+
+def fetch_styles():
+    cursor.execute(f"select * from styles")
+    return cursor.fetchall()
+
+def fetch_style_by_id(id):
+    cursor.execute(f"select * from styles where uid='{id}'")
+    return cursor.fetchone()
 
 # cursor.close()
 # connection.close()

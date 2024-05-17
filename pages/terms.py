@@ -13,7 +13,10 @@ def TermsAndConditionsPage(win):
         master=page, width=1280, height=720, bg_color="#f2e7e1", fg_color="#f2e7e1"
     )
 
-    win.title("Urban Utopia - Terms And Conditions")
+    def onmount():
+        win.title("Urban Utopia - Terms And Conditions")
+    
+        
 
     ########
 
@@ -246,4 +249,4 @@ holders and their terms of use.
 
     ########
 
-    return "termsandconditions", page
+    return "termsandconditions", page, onmount, lambda: None

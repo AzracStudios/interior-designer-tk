@@ -4,7 +4,8 @@ from widgets.image import ImageWidget
 
 def AboutPage(win):
     page = ctk.CTkFrame(master=win, width=1280, height=720)
-    win.title("Urban Utopia - About Us")
+    def onmount():
+        win.title("Urban Utopia - About Us")
 
     canvas = ctk.CTkCanvas(
         master=page, width=1280, height=720, borderwidth=0, highlightthickness=0
@@ -28,4 +29,4 @@ def AboutPage(win):
     back.place(relx=0.01, rely=0.02, anchor="nw")
 
 
-    return "about", page
+    return "about", page, onmount, lambda: None

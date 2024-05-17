@@ -6,6 +6,8 @@ from widgets.image import load_image_ctk
 def RoomSelectPage(win):
     page = ctk.CTkFrame(master=win, width=1280, height=720)
 
+    def onmount():
+        win.title("Urban Utopia - Select Room")
     rooms = fetch_rooms()
 
     row = 1
@@ -27,10 +29,32 @@ def RoomSelectPage(win):
 
         card.grid(row=row, column=col)
 
+
+        def room(uid):
+            win.room_id = uid
+            win.nav.navigate_to("styleselect")
+
+        img.bind("<Button-1>", command=lambda _,x=uid:room(x))
+
         col += 1
 
         if col > 2:
             row += 1
             col = 1
+    
+    back = ctk.CTkButton(
+        master=page,
+        text="< Back",
+        font=("Merriweather", 15),
+        width=100,
+        height=35,
+        corner_radius=0,
+        command=lambda: win.nav.navigate_to("welcome"),
+        bg_color="#EAC7C5",
+        fg_color="#f95959",
+        hover_color="#e15151",
+        background_corner_colors=("#EAC7C5",) * 4,
+    )
+    back.place(relx=0.98, rely=0.04, anchor="e")
 
-    return "roomselect", page
+    return "roomselect", page, onmount, lambda: None

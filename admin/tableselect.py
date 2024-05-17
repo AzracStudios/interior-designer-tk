@@ -7,7 +7,9 @@ def TableSelectPage(win, db, sql):
         master=win, width=1280, height=720, bg_color="#ececec", fg_color="#ececec"
     )
     page.pack_propagate(0)
-    win.title("Urban Utopia Admin - Select")
+
+    def onmount():
+        win.title("Urban Utopia Admin - Select")
 
     frame = ctk.CTkFrame(master=page, bg_color="#ececec", fg_color="#ececec")
 
@@ -48,4 +50,4 @@ def TableSelectPage(win, db, sql):
     logo_frame.place(relx=0.5, rely=0.07, anchor="center")
     frame.place(relx=0.5, rely=0.5, anchor="center")
 
-    return "tableselect", page
+    return "tableselect", page, onmount, lambda: None
