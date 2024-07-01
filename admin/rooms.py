@@ -8,6 +8,7 @@ from tkinter.filedialog import askopenfilename
 
 from widgets.image_preview import ImagePreview
 import io
+
 # Table Schema:
 #   uid varchar(36) not null primary key,
 #   room_name varchar(255) not null unique

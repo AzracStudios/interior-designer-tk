@@ -21,9 +21,10 @@ def WelcomePage(win):
         if os.path.isfile("login"):
             with open("login", "r") as f:
                 content = f.readlines()
-                if login_user(content[0], content[1], hashed=True) == 1:
+                print(content)
+                if login_user(content[1].strip(), content[2], hashed=True) == 1:
                     nonlocal user_details
-                    user_details = get_user(content[0])
+                    user_details = content[0].strip()
 
         ## actions
         if user_details is None:
@@ -48,14 +49,15 @@ def WelcomePage(win):
             signinact.place(relx=0.85, rely=0.03, anchor="ne")
         
         else:
+
             signedtext = ctk.CTkLabel(
                 master=canvas,
-                text=f"Welcome, {user_details[0]}",
+                text=f"Welcome, {user_details}",
                 font=("Merriweather", 18),
             )
-            logout = ctk.CTkButton(master=canvas)
-            signedtext.place(relx=0.85, rely=0.03, anchor="ne")
-            logout.place(relx=0.9, rely=0.03, anchor="ne")
+            
+            signedtext.place(relx=0.95, rely=0.03, anchor="ne")
+    
 
     page.after(0, on_mount)
 

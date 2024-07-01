@@ -221,7 +221,7 @@ holders and their terms of use.
         ),
     )
 
-    nxt.grid(row=1, column=len(sections) + 1)
+    nxt.grid(row=1, column=len(sections) + 2)
 
     update_select(0)
     section_select.pack()

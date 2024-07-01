@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from widgets.image import ImageWidget
-from sql.api import login_user
+from sql.api import login_user, get_name
 from utils import encrypt
 
 
@@ -9,9 +9,10 @@ def SignInPage(win):
 
     def onmount():
         win.title("Urban Utopia - Sign In")
+
     def ondestroy():
-        form_email_entry.delete(0, form_email_entry.get())
-        form_pwd_entry.delete(0, form_pwd_entry.get())
+        form_email_entry.delete(0, len(form_email_entry.get()))
+        form_pwd_entry.delete(0, len(form_pwd_entry.get()))
 
     canvas = ctk.CTkCanvas(
         master=page, width=1280, height=720, borderwidth=0, highlightthickness=0
@@ -83,8 +84,10 @@ def SignInPage(win):
 
         if login_status == 1:
             with open("login", "w") as f:
-                f.write(f"{form_email_entry.get()}\n{encrypt(form_pwd_entry.get())}")
-            
+                f.write(
+                    f"{get_name(form_email_entry.get())}\n{form_email_entry.get()}\n{encrypt(form_pwd_entry.get())}"
+                )
+
             form_email_entry.delete(0, len(form_email_entry.get()))
             form_pwd_entry.delete(0, len(form_pwd_entry.get()))
             win.nav.navigate_to("welcome")

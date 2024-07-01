@@ -26,9 +26,11 @@ def load_image(path, size):
     return itkimg
 
 
-def load_image_ctk(path, size):
+def load_image_ctk(path, size, ret_size=False):
     blob, size = load_blob(path, size)
     ctkimg = ctk.CTkImage(light_image=blob, size=size)
+    if ret_size:
+        return ctkimg, size
     return ctkimg
 
 

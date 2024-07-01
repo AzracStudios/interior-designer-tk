@@ -1,10 +1,14 @@
+import uuid
+
+import mysql.connector
 import customtkinter as ctk
+from tkinter.filedialog import askopenfilename
+
+
+from sql.api import store_image
+
 from widgets.table import Table
 from widgets.image import load_image_ctk
-import uuid
-import mysql.connector
-from utils import encrypt
-from tkinter.filedialog import askopenfilename
 from widgets.image_preview import ImagePreview
 from widgets.dropselect import DropSelect
 
@@ -52,7 +56,7 @@ def handle_sql_create(
 
     try:
         cursor.execute(
-            f"insert into designs (uid, design_name, design_img, roomID, styleID) values ('{uid}', '{design_name}', '{design_img}', '{room_id}', '{style_id}')"
+            f"insert into designs (uid, design_name, design_img, roomID, styleID) values ('{uid}', '{design_name}', '{store_image(design_img)}', '{room_id}', '{style_id}')"
         )
 
         db.commit()
@@ -92,7 +96,7 @@ def handle_sql_edit(
 
     try:
         cursor.execute(
-            f"update designs set design_name='{design_name}', design_img='{design_img}', roomID='{room_id}', styleID='{style_id}' where uid='{uid}'"
+            f"update designs set design_name='{design_name}', design_img='{store_image(design_img)}', roomID='{room_id}', styleID='{style_id}' where uid='{uid}'"
         )
 
         db.commit()

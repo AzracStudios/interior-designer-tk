@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from widgets.image import ImageWidget
+from sql.api import register_user, get_name
+from sql.api import encrypt
 
 
 def SignUpPage(win):
@@ -92,12 +94,30 @@ def SignUpPage(win):
     ctk.CTkLabel(master=form_frame, text="").pack(pady=2)
 
     ## submit
+    def handle_signup():
+        if not (form_pwd_entry.get(), form_email_entry.get(), form_pwd_entry.get()):
+            return
+
+        register_user(
+            form_name_entry.get(), form_email_entry.get(), form_pwd_entry.get()
+        )
+
+        with open("login", "w") as f:
+            f.write(
+                f"{get_name(form_email_entry.get())}\n{form_email_entry.get()}\n{encrypt(form_pwd_entry.get())}"
+            )
+
+        form_email_entry.delete(0, len(form_email_entry.get()))
+        form_pwd_entry.delete(0, len(form_pwd_entry.get()))
+        win.nav.navigate_to("welcome")
+
     form_submit = ctk.CTkButton(
         master=form_frame,
         text="Sign Up",
         height=50,
         width=150,
         font=("Merriweather", 18),
+        command=handle_signup,
     )
     form_submit.pack(pady=5)
 
