@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from sql.api import fetch_room_by_id, fetch_styles
+from sql.api import fetch_room_by_id, fetch_styles, fetch_style_card
 from widgets.image import load_image_ctk
 
 
@@ -31,6 +31,16 @@ def StyleSelectPage(win):
             desc = ctk.CTkLabel(
                 master=style_card, text=desc, font=("Merriweather", 15, "bold")
             )
+            image = fetch_style_card(st_uid)
+            img_display = ctk.CTkLabel(
+                master=style_card,
+                text="",
+                image=load_image_ctk(image, (200, 0)),
+            )
+
+            img_display.place(relx=0.25, rely=0.4, anchor="nw")
+
+
             name.pack(pady=4)
             desc.pack(pady=2)
             style_card.uid = st_uid

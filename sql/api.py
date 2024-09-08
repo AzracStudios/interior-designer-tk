@@ -8,6 +8,11 @@ from utils import encrypt, correct_path
 
 from sql.tables import TABLES
 
+# CREATE SQL DATA DIRECTORY
+data_path = f"{os.sep.join(__file__.split(os.sep)[:-1])}{os.sep}data"
+if not os.path.isdir(data_path):
+    os.system(f"mkdir {data_path}")
+
 parser = argparse.ArgumentParser(
     prog="Urban Utopia Admin",
 )
@@ -119,6 +124,9 @@ def fetch_styles():
     cursor.execute(f"select * from styles")
     return cursor.fetchall()
 
+def fetch_style_card(styleId):
+    cursor.execute(f"select design_img from designs where styleId='{styleId}'")
+    return cursor.fetchone()[0]
 
 def fetch_style_by_id(id):
     cursor.execute(f"select * from styles where uid='{id}'")

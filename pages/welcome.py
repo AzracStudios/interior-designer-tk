@@ -2,6 +2,7 @@ import customtkinter as ctk
 from widgets.image import ImageWidget
 import os
 from sql.api import login_user, get_user
+from tkinter.messagebox import askyesno
 
 
 def WelcomePage(win):
@@ -11,55 +12,88 @@ def WelcomePage(win):
 
     def onmount():
         win.title("Urban Utopia - Welcome")
+        page.after(0, on_mount)
 
     canvas = ctk.CTkCanvas(
         master=page, width=1280, height=720, borderwidth=0, highlightthickness=0
     )
     canvas.place(x=0, y=0)
 
-    def on_mount():
-        if os.path.isfile("login"):
-            with open("login", "r") as f:
-                content = f.readlines()
-                print(content)
-                if login_user(content[1].strip(), content[2], hashed=True) == 1:
-                    nonlocal user_details
-                    user_details = content[0].strip()
 
-        ## actions
-        if user_details is None:
+    signupact = signinact = None
+    def on_mount():
+        nonlocal user_details,  signupact, signinact
+        user_details = None
+
+        def setup_actionbuttons():
+            nonlocal signupact, signinact
             signupact = ctk.CTkButton(
-                master=canvas,
-                text="Sign Up",
-                font=("Merriweather", 18),
-                corner_radius=0,
-                height=40,
-                command=lambda: win.nav.navigate_to("signup"),
-            )
+                    master=canvas,
+                    text="Sign Up",
+                    font=("Merriweather", 18),
+                    corner_radius=0,
+                    height=40,
+                    command=lambda: win.nav.navigate_to("signup"),
+                )
             signupact.place(relx=0.98, rely=0.03, anchor="ne")
 
             signinact = ctk.CTkButton(
-                master=canvas,
-                text="Sign In",
-                font=("Merriweather", 18),
-                corner_radius=0,
-                height=40,
-                command=lambda: win.nav.navigate_to("signin"),
-            )
+                    master=canvas,
+                    text="Sign In",
+                    font=("Merriweather", 18),
+                    corner_radius=0,
+                    height=40,
+                    command=lambda: win.nav.navigate_to("signin"),
+                )
             signinact.place(relx=0.85, rely=0.03, anchor="ne")
+
+        if os.path.isfile("login"):
+            with open("login", "r") as f:
+                content = f.readlines()
+                
+                if len(content) and login_user(content[1].strip(), content[2], hashed=True) == 1:
+                    user_details = content[0].strip()
+        ## actions
+        if user_details is None:
+            setup_actionbuttons()
         
         else:
+            def signout():
+                if askyesno("Urban Utopia - Logout", message="Do you want to logout?"):
+                    with open("login", "w") as f:
+                        f.write("")
+                
+                    signedtext.destroy()
+                    setup_actionbuttons()
 
-            signedtext = ctk.CTkLabel(
+            if signupact and signinact:
+                signupact.destroy()
+                signinact.destroy()
+
+            signedtext =  ctk.CTkButton(
                 master=canvas,
                 text=f"Welcome, {user_details}",
                 font=("Merriweather", 18),
+                corner_radius=0,
+                height=40,
+                command=signout,
+            )
+
+            liked =  ctk.CTkButton(
+                master=canvas,
+                text=f"Interested Designs",
+                font=("Merriweather", 18),
+                corner_radius=0,
+                height=40,
+                width=200,
+                command=lambda: win.nav.navigate_to("interested"),
             )
             
             signedtext.place(relx=0.95, rely=0.03, anchor="ne")
+            liked.place(relx=0.8, rely=0.03, anchor="ne")
     
 
-    page.after(0, on_mount)
+    
 
     ## background image
     ImageWidget(canvas, "./assets/welcome_bg.png", (1280, 720), x=0, y=0, anchor="nw")

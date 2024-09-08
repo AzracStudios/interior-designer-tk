@@ -14,6 +14,8 @@ from pages.roomselect import RoomSelectPage
 from pages.pwdreset import PasswordResetPage
 from pages.styleselect import StyleSelectPage
 from pages.designs import DesignPage
+from pages.interested import InterestedPage
+
 
 def make_window():
     ctk.set_appearance_mode("light")
@@ -57,7 +59,8 @@ def main():
         PasswordResetPage,
         RoomSelectPage,
         StyleSelectPage,
-        DesignPage
+        DesignPage,
+        InterestedPage
     ]
     nav = config_navigator(window, PAGES)
 

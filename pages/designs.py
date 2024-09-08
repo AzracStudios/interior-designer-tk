@@ -1,11 +1,13 @@
 import customtkinter as ctk
 from sql.api import fetch_room_by_id, fetch_style_by_id, fetch_designs
 from widgets.image import load_image_ctk
+import pickle 
 
 current_image_index = 0
 image_widgets = []
 images = []
-
+add_to_interest = None
+liked = []
 
 def DesignPage(win):
     global current_image_index, image_widgets
@@ -17,7 +19,15 @@ def DesignPage(win):
     image_height = 500
 
     def onmount():
-        global actions_frame, image_name, image_widgets, current_image_index, images
+        global actions_frame, image_name, image_widgets, current_image_index, images, liked, add_to_interest
+        
+        try:
+            with open("interested", "rb") as f:
+                liked = pickle.load(f)
+
+        except:
+            with open("interested", "wb") as f:
+                pickle.dump([], f)
         
         image_widgets = []
         images = []
@@ -34,10 +44,10 @@ def DesignPage(win):
         name = None
 
         for result in res:
-            images.append((result[1], result[2]))
+            images.append((result[0], result[1], result[2]))
 
         for i, t in enumerate(images):
-            name, image = t
+            uid, name, image = t
             img, size = load_image_ctk(image, (0, image_height), ret_size=True)
 
             image_widget = ctk.CTkLabel(
@@ -46,7 +56,7 @@ def DesignPage(win):
                 image=img,
             )
 
-            image_widgets.append((image_widget, size, name))
+            image_widgets.append((uid, image_widget, size, name))
 
         actions_frame = ctk.CTkFrame(
             master=page,
@@ -65,6 +75,28 @@ def DesignPage(win):
 
         image_name.grid(row=1, column=1, sticky="w", pady=10)
 
+
+        def interested():
+            global liked
+            try:
+                with open("interested", "rb") as f:
+                    liked = pickle.load(f)
+
+                with open("interested", "wb") as f:
+                    print(liked, image_widgets[current_image_index][0])
+                    if (x:=image_widgets[current_image_index][0]) in liked:
+                        liked.pop(liked.index(x))
+                        add_to_interest.configure(text="Add To Interested")
+                    else:
+                        liked.append(image_widgets[current_image_index][0])
+                        add_to_interest.configure(text="Remove From Interested")
+                    pickle.dump(liked, f)
+                
+            except:
+                with open("interested", "wb") as f:
+                    pickle.dump([image_widgets[current_image_index][0]], f)
+        
+
         add_to_interest = ctk.CTkButton(
             master=actions_frame,
             text="Add To Interested",
@@ -72,7 +104,9 @@ def DesignPage(win):
             fg_color="#101621",
             hover_color="#101621",
             background_corner_colors=("#EAC7C5",) * 4,
+            width=250,
             font=("Merriweather", 12),
+            command=lambda: interested()
         )
 
         add_to_interest.grid(row=1, column=2, sticky="e", pady=10, padx=80)
@@ -103,18 +137,18 @@ def DesignPage(win):
     images_frame.place(relx=0.5, rely=0.5, anchor="center")
 
     def move_images(shift):
-        global current_image_index
-        global actions_frame
+        global current_image_index, actions_frame, add_to_interest
 
         current_image_index += shift
 
         if current_image_index < 0:
             current_image_index = len(image_widgets) - 1
+
         if current_image_index > len(image_widgets) - 1:
             current_image_index = 0
 
         for i, t in enumerate(image_widgets):
-            image, size, name = t
+            uid, image, size, name = t
 
             image.place(
                 rely=0,
@@ -122,10 +156,15 @@ def DesignPage(win):
                 anchor="nw",
             )
 
-
             if i == current_image_index:
                 image_name.configure(text=name)
                 image_name.grid(row=1, column=1, sticky="w")
+                print(liked)
+                if uid in liked:
+                    add_to_interest.configure(text="Remove From Interested")
+
+                else:
+                    add_to_interest.configure(text="Add To Interested")
 
     prev = ctk.CTkButton(
         master=page,
