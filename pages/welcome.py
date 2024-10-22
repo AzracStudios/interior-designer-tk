@@ -64,6 +64,7 @@ def WelcomePage(win):
                         f.write("")
                 
                     signedtext.destroy()
+                    liked.destroy()
                     setup_actionbuttons()
 
             if signupact and signinact:
